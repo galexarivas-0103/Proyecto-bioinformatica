@@ -485,9 +485,9 @@ En esta gráfica visualizamos algunos genes de los que más diferencian a ambos 
 Cada gen tiene:
 una barra para UTI y una barra para comensales. Esto permite visualizar rápidamente: genes enriquecidos, genes compartidos y genes exclusivos.
 
-## Repetimos todo para VFDB
+## Se repitió todo para VFDB
 
-Finalmente, realizamos exactamente el mismo procedimiento para los genes de virulencia usando:
+Para poder obtener las gráficas anteriores, realizamos exactamente el mismo procedimiento para los genes de virulencia usando: 
 
 * `UTI_VFDB_tabs`
 * `commensal_VFDB_tabs`
