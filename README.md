@@ -27,40 +27,6 @@ Para el análisis de genes específicos usamos la herramienta de línea de coman
 
 Esta se instaló en un entorno **Conda** independiente para asegurar la reproducibilidad y evitar conflictos de dependencias.
 
-## Solicitud de sesión interactiva
-
-```bash
-salloc -N 1 -n 4 -p normal
-```
-
-Verificamos qué versión de Conda tenía disponible el clúster:
-
-```bash
-conda --version
-```
-
-En este caso, la versión disponible fue:
-
-```bash
-conda 4.9.2
-```
-
-Luego verificamos cuál instalación de Conda estábamos usando realmente:
-
-```bash
-which conda
-```
-
-Y apareció:
-
-```bash
-/opt/ohpc/pub/libs/gnu7/conda/anaconda3/bin/conda
-```
-
-Eso confirmó que el HPC ya tenía **Anaconda** instalado globalmente, así que no necesitábamos instalar Miniconda manualmente.
-
----
-
 ## Crear un entorno propio para el proyecto
 
 Luego creamos nuestro entorno aislado con:
@@ -218,38 +184,6 @@ do
     base=$(basename $f .fna)
     abricate --db vfdb $f > commensal_VFDB_tabs/${base}.tab
 done
-```
-
----
-
-## Generar summaries
-
-Generamos los archivos *summary* porque los resultados individuales de ABRicate contienen demasiado detalle y no están organizados de la mejor manera para hacer comparaciones globales entre cepas.
-
-Estos comandos toman todos los archivos `.tab` generados previamente y los combinan en una sola tabla resumen.
-
-### CARD UTI
-
-```bash
-abricate --summary UTI_CARD_tabs/*.tab > UTI_CARD_summary.tab
-```
-
-### CARD comensales
-
-```bash
-abricate --summary commensal_CARD_tabs/*.tab > commensal_CARD_summary.tab
-```
-
-### VFDB UTI
-
-```bash
-abricate --summary UTI_VFDB_tabs/*.tab > UTI_VFDB_summary.tab
-```
-
-### VFDB comensales
-
-```bash
-abricate --summary commensal_VFDB_tabs/*.tab > commensal_VFDB_summary.tab
 ```
 
 ---
