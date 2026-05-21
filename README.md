@@ -4,15 +4,23 @@
 
 Inicialmente, se accedió a la base de datos **NCBI Assembly** para la obtención de genomas de *Escherichia coli*. En la barra de búsqueda se utilizó el término `"Escherichia coli"`.
 
+<img width="1492" height="662" alt="NCBI1" src="https://github.com/user-attachments/assets/89054b52-359b-4d0f-a3c5-71d06d059d00" />
+
 Para el grupo asociado a infección urinaria (**UTI/UPEC**), se emplearon palabras clave como `"UTI"` y `"urine"` dentro de los resultados de búsqueda.
 
 Adicionalmente, se restringió la selección a ensamblajes publicados en los últimos 10 años `(2016–2026)`, con el fin de trabajar con secuencias recientes y clínicamente relevantes. Finalmente, solo se clasificó a nivel *contig*.
 
+<img width="1477" height="652" alt="NCBI2" src="https://github.com/user-attachments/assets/c1010daa-78e7-4196-8e11-124927ba149d" />
+
 Para el grupo comensal se aplicó el mismo procedimiento, utilizando la palabra clave `"commensal"` y restringiendo la selección a ensamblajes publicados entre `2016–2026`. Finalmente, también se clasificó a nivel *contig*.
 
-Para descargar las secuencias, nos dirigimos a la sección **RefSeq** con el fin de descargar todos los contigs asociados a la cepa seleccionada.
+<img width="1537" height="672" alt="NCBI3" src="https://github.com/user-attachments/assets/a25927ef-f700-4f20-9c7b-8667b51f7399" />
 
-Se descargaron todos los archivos en formato `FASTA`.
+Para descargar las secuencias, nos dirigimos aL botón de  **Download** y seleccionamos la opción **Download package** 
+
+<img width="960" height="665" alt="NCBI4" src="https://github.com/user-attachments/assets/5c99c596-422f-45a0-aaab-7999656c9a6c" />
+
+Se descargaron todos los archivos .zip y en la terminal los decomprimimos y obtuvimos las secuencias.
 
 Finalmente, se descargaron:
 
@@ -115,18 +123,18 @@ Observamos que sí estaban las bases que necesitábamos, en este caso **CARD** y
 
 | DATABASE | SEQUENCES | DBTYPE | DATE |
 |---|---|---|---|
-| argannot | 2224 | nucl | 2026-May-18 |
-| bacmet2 | 746 | prot | 2026-May-18 |
-| card | 6052 | nucl | 2026-May-18 |
-| ecoh | 597 | nucl | 2026-May-18 |
-| ecoli_vf | 2701 | nucl | 2026-May-18 |
-| megares | 6635 | nucl | 2026-May-18 |
-| ncbi | 8232 | nucl | 2026-May-18 |
-| plasmidfinder | 488 | nucl | 2026-May-18 |
-| resfinder | 3206 | nucl | 2026-May-18 |
-| upec_expec_vf | 77 | nucl | 2026-May-18 |
-| vfdb | 4592 | nucl | 2026-May-18 |
-| victors | 4545 | nucl | 2026-May-18 |
+| argannot | 2224 | nucl | 2026-May-07 |
+| bacmet2 | 746 | prot | 2026-May-07 |
+| card | 6052 | nucl | 2026-May-07 |
+| ecoh | 597 | nucl | 2026-May-07 |
+| ecoli_vf | 2701 | nucl | 2026-May-07 |
+| megares | 6635 | nucl | 2026-May-07 |
+| ncbi | 8232 | nucl | 2026-May-07 |
+| plasmidfinder | 488 | nucl | 2026-May-07 |
+| resfinder | 3206 | nucl | 2026-May-07 |
+| upec_expec_vf | 77 | nucl | 2026-May-07 |
+| vfdb | 4592 | nucl | 2026-May-07 |
+| victors | 4545 | nucl | 2026-May-07 |
 
 ---
 
@@ -185,6 +193,8 @@ do
     abricate --db vfdb $f > commensal_VFDB_tabs/${base}.tab
 done
 ```
+Esto es lo que vemos al abrir los archivos .tab:
+<img width="1367" height="481" alt="tabla_tab" src="https://github.com/user-attachments/assets/6ad98827-8f6f-4b26-a59e-84ddf377def8" />
 
 ---
 
@@ -328,7 +338,10 @@ rownames(uti_matrix) <- basename(uti_files)
 rownames(com_matrix) <- basename(com_files)
 ```
 
----
+Así se ven las matrices que obtenemos:
+
+<img width="1681" height="382" alt="matriz" src="https://github.com/user-attachments/assets/61fc019e-6a25-484e-993b-ce909f5cef8f" />
+
 
 ## Contar genes por genoma
 
@@ -360,6 +373,9 @@ boxplot(uti_counts,
 
 dev.off()
 ```
+<img width="1557" height="631" alt="boxplot" src="https://github.com/user-attachments/assets/36bedd6a-a37c-4cbb-ab8c-29e4eecee348" />
+
+Este gráfico ompara la distribución del número total de genes entre cepas UTI y cepas comensales.
 
 ---
 
@@ -432,6 +448,7 @@ top_genes <- freq_table$Gene[1:15]
 ```
 
 Elegimos los 15 genes con mayor diferencia entre grupos.
+(elegimos 15 por cuestiones de facilidad para observar los datos en la siguiente gráfica)
 
 ---
 
@@ -461,8 +478,12 @@ barplot(
 
 dev.off()
 ```
+<img width="1812" height="572" alt="barplot" src="https://github.com/user-attachments/assets/0da6b95d-fff5-4dda-b1ce-e597a2b1d16a" />
 
 ---
+En esta gráfica visualizamos algunos genes de los que más diferencian a ambos grupos
+Cada gen tiene:
+una barra para UTI y una barra para comensales. Esto permite visualizar rápidamente: genes enriquecidos, genes compartidos y genes exclusivos.
 
 ## Repetimos todo para VFDB
 
