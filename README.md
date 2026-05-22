@@ -752,7 +752,7 @@ Este paso fue necesario porque PCA no puede trabajar con columnas constantes.
 
 Los genes presentes en todas las cepas o ausentes en todas las cepas no aportan información.
 
-# PCA resistencia
+## PCA resistencia
 
 ```r
 pca_res <- prcomp(
@@ -761,7 +761,7 @@ pca_res <- prcomp(
 )
 ```
 
-# PCA virulencia
+## PCA virulencia
 
 ```r
 pca_vf <- prcomp(
@@ -770,7 +770,7 @@ pca_vf <- prcomp(
 )
 ```
 
-# Revisar varianza explicada
+## Revisar varianza explicada
 
 ```r
 summary(pca_res)
@@ -784,7 +784,7 @@ Aquí observamos qué porcentaje de variación explica cada componente principal
 
 <img width="767" height="926" alt="summary_pca_virulencia" src="https://github.com/user-attachments/assets/1e2a0a41-72a6-4841-b93a-21453bc1e93e" />
 
-# Graficar PCA resistencia
+## Graficar PCA resistencia
 
 ```r
 pdf("PCA_resistance.pdf")
@@ -814,7 +814,7 @@ dev.off()
 ```
 <img width="858" height="863" alt="PCA_grafica_resistencia" src="https://github.com/user-attachments/assets/f1be6ea7-021e-4390-b57f-4e539f9c2d3c" />
 
-# Graficar PCA virulencia
+## Graficar PCA virulencia
 
 ```r
 pdf("PCA_virulence.pdf")
@@ -854,13 +854,13 @@ Interpretación:
 
 Finalmente realizamos clustering.
 
-# Distancias resistencia
+## Distancias resistencia
 
 ```r
 dist_res <- dist(res_filtered)
 ```
 
-# Distancias virulencia
+## Distancias virulencia
 
 ```r
 dist_vf <- dist(vf_filtered)
@@ -870,7 +870,7 @@ dist_vf <- dist(vf_filtered)
 
 Después construimos dendrogramas.
 
-# Clustering resistencia
+## Clustering resistencia
 
 ```r
 hc_res <- hclust(dist_res)
@@ -891,7 +891,7 @@ dev.off()
 
 <img width="1095" height="688" alt="clustering_resistencia" src="https://github.com/user-attachments/assets/4908a55e-71b5-4fc6-87c8-7277e7b27b01" />
 
-# Clustering virulencia
+## Clustering virulencia
 
 ```r
 hc_vf <- hclust(dist_vf)
