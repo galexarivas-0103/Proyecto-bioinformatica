@@ -770,15 +770,6 @@ pca_vf <- prcomp(
 )
 ```
 
-El PCA reduce dimensionalidad.
-
-En lugar de analizar decenas de genes simultáneamente, PCA resume la variación en componentes principales.
-
-* PC1 → mayor variación
-* PC2 → segunda mayor variación
-
-Esto permite visualizar patrones globales.
-
 # Revisar varianza explicada
 
 ```r
@@ -927,4 +918,4 @@ Interpretación:
 * ramas cercanas → perfiles similares
 * ramas lejanas → perfiles diferentes
 
-Este análisis permitió evaluar si las cepas se agrupaban naturalmente según sus perfiles de resistencia y virulencia.
+
