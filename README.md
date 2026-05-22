@@ -1,6 +1,6 @@
 # Comparación de perfiles de resistencia y virulencia entre cepas uropatógenas y comensales de *Escherichia coli*
 
-## Descarga de datos
+# 1.Descarga de datos
 
 Inicialmente, se accedió a la base de datos **NCBI Assembly** para la obtención de genomas de *Escherichia coli*. En la barra de búsqueda se utilizó el término `"Escherichia coli"`.
 
@@ -29,7 +29,7 @@ Finalmente, se descargaron:
 
 ---
 
-# ANÁLISIS EN ABRICATE
+# 2.ANÁLISIS EN ABRICATE
 
 Para el análisis de genes específicos usamos la herramienta de línea de comandos **ABRicate**, que sirve para identificar computacionalmente genes de resistencia y virulencia en genomas bacterianos.
 
@@ -198,7 +198,7 @@ Esto es lo que vemos al abrir los archivos .tab:
 
 ---
 
-# R
+# 3.Análisis en R
 
 ## Identificar archivos `.tab`
 
@@ -486,9 +486,445 @@ Cada gen tiene:
 una barra para UTI y una barra para comensales. Esto permite visualizar rápidamente: genes enriquecidos, genes compartidos y genes exclusivos.
 
 ## Se repitió todo para VFDB
+Para poder obtener las gráficas anteriores, realizamos exactamente el mismo procedimiento para los genes de virulencia usando:
+*UTI_VFDB_tabs
+*commensal_VFDB_tabs
+# 4.Análisis estádistico 
+Primero realizamos la prueba exacta de Fisher, porque esta prueba nos permitió identificar si los genes estaban significativamente asociados a las cepas uropatógenas (UTI/UPEC) y comensales.
 
-Para poder obtener las gráficas anteriores, realizamos exactamente el mismo procedimiento para los genes de virulencia usando: 
+Esta fue la prueba estadística principal de nuestro proyecto porque responde directamente a la pregunta biológica central:
 
-* `UTI_VFDB_tabs`
-* `commensal_VFDB_tabs`
-````
+## ¿Existen genes de resistencia o virulencia significativamente diferentes entre cepas UTI y comensales?
+
+Para realizar el análisis comenzamos cargando nuevamente las matrices binarias de presencia/ausencia.
+
+```r
+
+uti_res <- read.csv(
+    "UTI_presence_absence.csv",
+    row.names=1,
+    check.names=FALSE
+)
+
+com_res <- read.csv(
+    "Commensal_presence_absence.csv",
+    row.names=1,
+    check.names=FALSE
+)
+
+uti_vf <- read.csv(
+    "UTI_VFDB_presence_absence_matrix.csv",
+    row.names=1,
+    check.names=FALSE
+)
+
+com_vf <- read.csv(
+    "Commensal_VFDB_presence_absence_matrix.csv",
+    row.names=1,
+    check.names=FALSE
+)
+```
+
+Después unimos los grupos UTI y comensales en una sola matriz.
+
+```r
+
+combined_res <- rbind(
+    uti_res,
+    com_res
+)
+
+combined_vf <- rbind(
+    uti_vf,
+    com_vf
+)
+```
+
+Usamos `rbind()` porque necesitábamos comparar simultáneamente todas las cepas.
+
+Luego creamos un vector indicando a qué grupo pertenece cada genoma.
+
+```r
+
+group_res <- c(
+    rep("UTI", nrow(uti_res)),
+    rep("Commensal", nrow(com_res))
+)
+
+group_vf <- c(
+    rep("UTI", nrow(uti_vf)),
+    rep("Commensal", nrow(com_vf))
+)
+```
+
+Esto fue importante porque Fisher compara frecuencias entre grupos.
+
+## Prueba exacta de Fisher
+
+Después aplicamos Fisher gen por gen.
+
+#### Fisher para genes de resistencia
+
+```r
+fisher_results <- lapply(
+
+    colnames(combined_res),
+
+    function(gene){
+
+        tab <- table(
+            combined_res[,gene],
+            group_res
+        )
+
+        if(nrow(tab)==2 & ncol(tab)==2){
+
+            test <- fisher.test(tab)
+
+            data.frame(
+                Gene = gene,
+                Pvalue = test$p.value
+            )
+
+        }
+
+})
+```
+
+## Corrección por múltiples pruebas
+
+Después corregimos los valores de p.
+
+```r
+fisher_results$Adjusted_P <- p.adjust(
+    fisher_results$Pvalue,
+    method="BH"
+)
+```
+
+Esto fue fundamental porque realizamos decenas de pruebas simultáneamente.
+
+Si no corrigiéramos los valores de p, aparecerían falsos positivos por azar.
+
+Usamos el método BH (Benjamini-Hochberg), que controla la tasa de falsos descubrimientos.
+
+## Ordenar genes más significativos
+
+```r
+fisher_results <- fisher_results[
+    order(fisher_results$Adjusted_P),
+]
+```
+
+Esto organiza la tabla desde los genes más significativos hasta los menos significativos.
+
+así se ven nuestras tablas de fisher:
+
+<img width="551" height="687" alt="tabla_fisher" src="https://github.com/user-attachments/assets/94ec6fa8-0d92-4ec6-be1c-9970fd1b0067" />
+
+
+## Filtrar genes significativos
+Ya que son tantos genes, filtramos solo los significativos
+```r
+significant_fisher_res <- fisher_results[
+    fisher_results$Adjusted_P < 0.05,
+]
+```
+
+## Contar genes significativos
+posteriormente los contamos
+```r
+nrow(significant_fisher_res)
+```
+<img width="495" height="107" alt="fisher_resistencia" src="https://github.com/user-attachments/assets/2100a563-b94e-45c9-be84-f2165bc216ea" />
+
+Esto nos indicó cuántos genes de resistencia resultaron significativamente diferentes entre grupos.
+
+#### Fisher para genes de virulencia
+
+Después repetimos exactamente el mismo procedimiento para virulencia.
+
+```r
+fisher_virulence <- lapply(
+
+    colnames(combined_vf),
+
+    function(gene){
+
+        tab <- table(
+            combined_vf[,gene],
+            group_vf
+        )
+
+        if(nrow(tab)==2 & ncol(tab)==2){
+
+            test <- fisher.test(tab)
+
+            data.frame(
+                Gene = gene,
+                Pvalue = test$p.value
+            )
+
+        }
+
+})
+```
+
+Eliminar resultados vacíos:
+
+```r
+fisher_virulence <- fisher_virulence[
+    !sapply(fisher_virulence, is.null)
+]
+```
+
+Unir resultados:
+
+```r
+fisher_virulence <- do.call(
+    rbind,
+    fisher_virulence
+)
+```
+
+Corregir p-values:
+
+```r
+fisher_virulence$Adjusted_P <- p.adjust(
+    fisher_virulence$Pvalue,
+    method="BH"
+)
+```
+
+Ordenar:
+
+```r
+fisher_virulence <- fisher_virulence[
+    order(fisher_virulence$Adjusted_P),
+]
+```
+
+Filtrar genes significativos:
+
+```r
+significant_fisher_vf <- fisher_virulence[
+    fisher_virulence$Adjusted_P < 0.05,
+]
+```
+
+Contar genes significativos:
+
+```r
+nrow(significant_fisher_vf)
+```
+<img width="502" height="107" alt="fisher_virulencia" src="https://github.com/user-attachments/assets/2d210b80-cacf-4898-a5ef-a324bcb28d69" />
+
+
+Estos análisis nos permitieron identificar genes de virulencia diferencialmente distribuidos entre ambos grupos bacterianos.
+
+Después de identificar genes significativamente diferentes, quisimos analizar si las cepas también presentaban diferencias globales en sus perfiles génicos completos.
+
+Para esto realizamos PCA.
+
+# PCA (Análisis de Componentes Principales)
+
+Primero eliminamos genes sin variación.
+
+## Filtrado resistencia
+
+```r
+res_filtered <- combined_res[
+    ,
+    apply(combined_res, 2, var) != 0
+]
+```
+
+## Filtrado virulencia
+
+```r
+vf_filtered <- combined_vf[
+    ,
+    apply(combined_vf, 2, var) != 0
+]
+```
+
+Este paso fue necesario porque PCA no puede trabajar con columnas constantes.
+
+Los genes presentes en todas las cepas o ausentes en todas las cepas no aportan información.
+
+# PCA resistencia
+
+```r
+pca_res <- prcomp(
+    res_filtered,
+    scale.=TRUE
+)
+```
+
+# PCA virulencia
+
+```r
+pca_vf <- prcomp(
+    vf_filtered,
+    scale.=TRUE
+)
+```
+
+El PCA reduce dimensionalidad.
+
+En lugar de analizar decenas de genes simultáneamente, PCA resume la variación en componentes principales.
+
+* PC1 → mayor variación
+* PC2 → segunda mayor variación
+
+Esto permite visualizar patrones globales.
+
+# Revisar varianza explicada
+
+```r
+summary(pca_res)
+
+summary(pca_vf)
+```
+
+Aquí observamos qué porcentaje de variación explica cada componente principal.
+
+<img width="891" height="667" alt="summary_pca_resistencia" src="https://github.com/user-attachments/assets/7d250d11-02a2-4f91-9a3e-8dacd46e014a" />
+
+<img width="767" height="926" alt="summary_pca_virulencia" src="https://github.com/user-attachments/assets/1e2a0a41-72a6-4841-b93a-21453bc1e93e" />
+
+# Graficar PCA resistencia
+
+```r
+pdf("PCA_resistance.pdf")
+
+plot(
+    pca_res$x[,1],
+    pca_res$x[,2],
+
+    col=ifelse(group_res=="UTI","red","blue"),
+
+    pch=19,
+
+    xlab="PC1",
+    ylab="PC2",
+
+    main="PCA Resistance Profiles"
+)
+
+legend(
+    "topright",
+    legend=c("UTI","Commensal"),
+    col=c("red","blue"),
+    pch=19
+)
+
+dev.off()
+```
+<img width="858" height="863" alt="PCA_grafica_resistencia" src="https://github.com/user-attachments/assets/f1be6ea7-021e-4390-b57f-4e539f9c2d3c" />
+
+# Graficar PCA virulencia
+
+```r
+pdf("PCA_virulence.pdf")
+
+plot(
+    pca_vf$x[,1],
+    pca_vf$x[,2],
+
+    col=ifelse(group_vf=="UTI","red","blue"),
+
+    pch=19,
+
+    xlab="PC1",
+    ylab="PC2",
+
+    main="PCA Virulence Profiles"
+)
+
+legend(
+    "topright",
+    legend=c("UTI","Commensal"),
+    col=c("red","blue"),
+    pch=19
+)
+
+dev.off()
+```
+<img width="858" height="857" alt="PCA_grafica_virulencia" src="https://github.com/user-attachments/assets/605edb39-757f-46ca-a7db-6cd0e716b1c8" />
+
+Interpretación:
+
+* grupos separados → perfiles distintos
+* grupos mezclados → perfiles similares
+
+
+# Clustering jerárquico
+
+Finalmente realizamos clustering.
+
+# Distancias resistencia
+
+```r
+dist_res <- dist(res_filtered)
+```
+
+# Distancias virulencia
+
+```r
+dist_vf <- dist(vf_filtered)
+```
+
+`dist()` calcula similitud entre cepas.
+
+Después construimos dendrogramas.
+
+# Clustering resistencia
+
+```r
+hc_res <- hclust(dist_res)
+
+pdf("Clustering_resistance.pdf",
+    width=12,
+    height=8)
+
+plot(
+    hc_res,
+    labels=group_res,
+
+    main="Hierarchical Clustering Resistance"
+)
+
+dev.off()
+```
+
+<img width="1095" height="688" alt="clustering_resistencia" src="https://github.com/user-attachments/assets/4908a55e-71b5-4fc6-87c8-7277e7b27b01" />
+
+# Clustering virulencia
+
+```r
+hc_vf <- hclust(dist_vf)
+
+pdf("Clustering_virulence.pdf",
+    width=12,
+    height=8)
+
+plot(
+    hc_vf,
+    labels=group_vf,
+
+    main="Hierarchical Clustering Virulence"
+)
+
+dev.off()
+```
+<img width="1092" height="637" alt="clustering_virulencia" src="https://github.com/user-attachments/assets/a1833c34-5d49-4e7b-9295-7bb84409b99c" />
+
+El clustering agrupa automáticamente cepas similares.
+
+Interpretación:
+
+* ramas cercanas → perfiles similares
+* ramas lejanas → perfiles diferentes
+
+Este análisis permitió evaluar si las cepas se agrupaban naturalmente según sus perfiles de resistencia y virulencia.
