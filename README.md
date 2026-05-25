@@ -198,6 +198,7 @@ done
 Esto es lo que vemos al abrir los archivos .tab:
 <img width="1333" height="692" alt="tabla_tab" src="https://github.com/user-attachments/assets/9e32260f-6bd8-4670-9cd5-f3e5073427b5" />
 
+Descargar archivos .tab [aquí](https://drive.google.com/file/d/18Yjr8L0Z5kgpmOS2ll3Shho7fWvZHWPU/view?usp=sharing)
 
 ---
 
