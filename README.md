@@ -492,6 +492,11 @@ una barra para UTI y una barra para comensales. Esto permite visualizar rápidam
 Para poder obtener las gráficas anteriores, realizamos exactamente el mismo procedimiento para los genes de virulencia usando:
 *UTI_VFDB_tabs
 *commensal_VFDB_tabs
+
+Descargar matrices de presencia y ausencia y matrices de frecuencia [aquí]([matrices.zip](https://github.com/user-attachments/files/28207708/matrices.zip))
+
+Descargar las gráficas crudas y arregladas realizadas en esta sección [aquí]([plots.zip](https://github.com/user-attachments/files/28207788/plots.zip))
+
 # 4.Análisis estádistico 
 Primero realizamos la prueba exacta de Fisher, porque esta prueba nos permitió identificar si los genes estaban significativamente asociados a las cepas uropatógenas (UTI/UPEC) y comensales.
 
@@ -1026,4 +1031,5 @@ Interpretación:
 * ramas cercanas → perfiles similares
 * ramas lejanas → perfiles diferentes
 
+Descargar tablas de fisher y todas las figuras resultantes de esta sección [aquí]([pruebas.zip](https://github.com/user-attachments/files/28207813/pruebas.zip))
 
