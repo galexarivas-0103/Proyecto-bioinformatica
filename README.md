@@ -194,7 +194,8 @@ do
 done
 ```
 Esto es lo que vemos al abrir los archivos .tab:
-<img width="1367" height="481" alt="tabla_tab" src="https://github.com/user-attachments/assets/6ad98827-8f6f-4b26-a59e-84ddf377def8" />
+<img width="1333" height="692" alt="tabla_tab" src="https://github.com/user-attachments/assets/9e32260f-6bd8-4670-9cd5-f3e5073427b5" />
+
 
 ---
 
@@ -340,8 +341,7 @@ rownames(com_matrix) <- basename(com_files)
 
 Así se ven las matrices que obtenemos:
 
-<img width="1681" height="382" alt="matriz" src="https://github.com/user-attachments/assets/61fc019e-6a25-484e-993b-ce909f5cef8f" />
-
+<img width="1802" height="477" alt="matriz" src="https://github.com/user-attachments/assets/65a0d76b-3971-462c-9a76-fc8073644794" />
 
 ## Contar genes por genoma
 
@@ -620,8 +620,7 @@ Esto organiza la tabla desde los genes más significativos hasta los menos signi
 
 así se ven nuestras tablas de fisher:
 
-<img width="551" height="687" alt="tabla_fisher" src="https://github.com/user-attachments/assets/94ec6fa8-0d92-4ec6-be1c-9970fd1b0067" />
-
+<img width="535" height="670" alt="tabla_fisher" src="https://github.com/user-attachments/assets/b992eec3-a862-435f-86fc-dca3afbe7f7f" />
 
 ## Filtrar genes significativos
 Ya que son tantos genes, filtramos solo los significativos
