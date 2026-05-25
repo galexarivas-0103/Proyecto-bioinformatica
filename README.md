@@ -27,6 +27,8 @@ Finalmente, se descargaron:
 * 50 archivos para las cepas comensales
 * 50 archivos para las cepas uropatógenas
 
+Descargar secuencias [aquí](https://drive.google.com/file/d/1eLkxCXPui6gkMq24YDUd9jENB94DtrUw/view?usp=sharing)
+
 ---
 
 # 2.ANÁLISIS EN ABRICATE
