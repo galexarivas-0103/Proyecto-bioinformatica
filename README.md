@@ -889,7 +889,8 @@ plot(
 dev.off()
 ```
 
-<img width="1095" height="688" alt="clustering_resistencia" src="https://github.com/user-attachments/assets/4908a55e-71b5-4fc6-87c8-7277e7b27b01" />
+<img width="1491" height="845" alt="clustering_resistencia" src="https://github.com/user-attachments/assets/d9cbc09c-3d5d-460a-bff0-db53b60c0a77" />
+
 
 ## Clustering virulencia
 
@@ -909,7 +910,7 @@ plot(
 
 dev.off()
 ```
-<img width="1092" height="637" alt="clustering_virulencia" src="https://github.com/user-attachments/assets/a1833c34-5d49-4e7b-9295-7bb84409b99c" />
+<img width="1493" height="851" alt="clustering_virulencia" src="https://github.com/user-attachments/assets/d1998b85-c272-4160-8de9-6c7302c61ae2" />
 
 El clustering agrupa automáticamente cepas similares.
 
