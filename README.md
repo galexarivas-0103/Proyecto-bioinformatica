@@ -636,9 +636,17 @@ posteriormente los contamos
 ```r
 nrow(significant_fisher_res)
 ```
-<img width="495" height="107" alt="fisher_resistencia" src="https://github.com/user-attachments/assets/2100a563-b94e-45c9-be84-f2165bc216ea" />
 
-Esto nos indicó cuántos genes de resistencia resultaron significativamente diferentes entre grupos.
+Esta fue la cantidad de genes de resistencia que resultaron significativamente diferentes entre grupos:
+
+```r
+significant_fisher_res <- fisher_results[
+  fisher_results$Adjusted_P < 0.05,
+]
+
+nrow(significant_fisher_res)
+[1] 8
+```
 
 #### Fisher para genes de virulencia
 
@@ -704,21 +712,16 @@ fisher_virulence <- fisher_virulence[
 ]
 ```
 
-Filtrar genes significativos:
+Filtrar genes significativos y contarlos:
 
 ```r
 significant_fisher_vf <- fisher_virulence[
-    fisher_virulence$Adjusted_P < 0.05,
+  fisher_virulence$Adjusted_P < 0.05,
 ]
-```
 
-Contar genes significativos:
-
-```r
 nrow(significant_fisher_vf)
+[1] 134
 ```
-<img width="502" height="107" alt="fisher_virulencia" src="https://github.com/user-attachments/assets/2d210b80-cacf-4898-a5ef-a324bcb28d69" />
-
 
 Estos análisis nos permitieron identificar genes de virulencia diferencialmente distribuidos entre ambos grupos bacterianos.
 
@@ -780,9 +783,111 @@ summary(pca_vf)
 
 Aquí observamos qué porcentaje de variación explica cada componente principal.
 
-<img width="891" height="667" alt="summary_pca_resistencia" src="https://github.com/user-attachments/assets/7d250d11-02a2-4f91-9a3e-8dacd46e014a" />
+Resistencia:
 
-<img width="767" height="926" alt="summary_pca_virulencia" src="https://github.com/user-attachments/assets/1e2a0a41-72a6-4841-b93a-21453bc1e93e" />
+```r
+summary(pca)
+
+Importance of components:
+                         PC1     PC2     PC3     PC4     PC5     PC6     PC7
+Standard deviation     3.0145  2.3044  2.0327  1.84107 1.74121 1.50513 1.44274
+Proportion of Variance 0.2216  0.1295  0.1008  0.08267 0.07395 0.05525 0.05077
+Cumulative Proportion  0.2216  0.3512  0.4519  0.53460 0.60854 0.66380 0.71457
+
+                         PC8     PC9     PC10    PC11    PC12    PC13    PC14
+Standard deviation     1.33657 1.21985 1.14329 1.0365  1.03069 1.00600 0.9732
+Proportion of Variance 0.04357 0.03629 0.03188 0.0262  0.02591 0.02468 0.0231
+Cumulative Proportion  0.75814 0.79443 0.82631 0.8525  0.87843 0.90311 0.9262
+
+                         PC15    PC16    PC17    PC18    PC19    PC20    PC21
+Standard deviation     0.88524 0.76120 0.70615 0.6242  0.50259 0.46124 0.37781
+Proportion of Variance 0.01911 0.01413 0.01216 0.0095  0.00616 0.00519 0.00348
+Cumulative Proportion  0.94533 0.95946 0.97162 0.9811  0.98728 0.99247 0.99595
+
+                         PC22    PC23    PC24     PC25     PC26     PC27
+Standard deviation     0.37302 0.16354 4.714e-16 3.777e-16 2.468e-16 1.981e-16
+Proportion of Variance 0.00339 0.00065 0.000e+00 0.000e+00 0.000e+00 0.000e+00
+Cumulative Proportion  0.99935 1.00000 1.000e+00 1.000e+00 1.000e+00 1.000e+00
+
+                         PC28     PC29     PC30     PC31     PC32
+Standard deviation     1.981e-16 1.981e-16 1.981e-16 1.981e-16 1.981e-16
+Proportion of Variance 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00
+Cumulative Proportion  1.000e+00 1.000e+00 1.000e+00 1.000e+00 1.000e+00
+
+                         PC33     PC34     PC35     PC36     PC37
+Standard deviation     1.981e-16 1.981e-16 1.981e-16 1.981e-16 1.981e-16
+Proportion of Variance 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00
+Cumulative Proportion  1.000e+00 1.000e+00 1.000e+00 1.000e+00 1.000e+00
+
+                         PC38     PC39     PC40     PC41
+Standard deviation     1.981e-16 1.981e-16 1.981e-16 8.768e-17
+Proportion of Variance 0.000e+00 0.000e+00 0.000e+00 0.000e+00
+Cumulative Proportion  1.000e+00 1.000e+00 1.000e+00 1.000e+00
+```
+
+Virulencia:
+```r
+summary(pca_vf)
+
+Importance of components:
+                         PC1     PC2     PC3     PC4     PC5     PC6     PC7
+Standard deviation     7.6143  7.0535  4.19205 3.79096 3.61782 3.44129 2.94616
+Proportion of Variance 0.2357  0.2022  0.0714  0.05842 0.05321 0.04814 0.03528
+Cumulative Proportion  0.2357  0.4379  0.50936 0.56778 0.62098 0.66912 0.70441
+
+                         PC8     PC9     PC10    PC11    PC12    PC13    PC14
+Standard deviation     2.89506 2.45107 2.41566 2.16614 1.98681 1.91664 1.79635
+Proportion of Variance 0.03407 0.02442 0.02372 0.01907 0.01605 0.01493 0.01312
+Cumulative Proportion  0.73848 0.76290 0.78662 0.80570 0.82174 0.83667 0.84979
+
+                         PC15    PC16    PC17    PC18    PC19    PC20    PC21
+Standard deviation     1.72951 1.6224  1.59382 1.51365 1.46052 1.38051 1.35278
+Proportion of Variance 0.01216 0.0107  0.01033 0.00931 0.00867 0.00775 0.00744
+Cumulative Proportion  0.86195 0.8727  0.88298 0.89229 0.90096 0.90871 0.91615
+
+                         PC22    PC23    PC24    PC25    PC26    PC27    PC28
+Standard deviation     1.29284 1.1844  1.12119 1.02725 1.01095 0.95587 0.93739
+Proportion of Variance 0.00679 0.0057  0.00511 0.00429 0.00415 0.00371 0.00357
+Cumulative Proportion  0.92294 0.9286  0.93376 0.93805 0.94220 0.94591 0.94949
+
+                         PC29    PC30    PC31    PC32    PC33    PC34    PC35
+Standard deviation     0.92138 0.90634 0.86056 0.85430 0.83295 0.81625 0.79667
+Proportion of Variance 0.00345 0.00334 0.00301 0.00297 0.00282 0.00271 0.00258
+Cumulative Proportion  0.95294 0.95628 0.95929 0.96225 0.96507 0.96778 0.97036
+
+                         PC36    PC37    PC38    PC39    PC40    PC41    PC42
+Standard deviation     0.77647 0.7518  0.72253 0.68916 0.67320 0.66133 0.6279
+Proportion of Variance 0.00245 0.0023  0.00212 0.00193 0.00184 0.00178 0.0016
+Cumulative Proportion  0.97281 0.9751  0.97723 0.97916 0.98101 0.98278 0.9844
+
+                         PC43    PC44    PC45    PC46    PC47    PC48    PC49
+Standard deviation     0.59622 0.57705 0.56092 0.52983 0.48600 0.48094 0.46707
+Proportion of Variance 0.00145 0.00135 0.00128 0.00114 0.00096 0.00094 0.00089
+Cumulative Proportion  0.98583 0.98719 0.98846 0.98961 0.99057 0.99151 0.99239
+
+                         PC50    PC51    PC52    PC53    PC54    PC55    PC56
+Standard deviation     0.4442  0.43183 0.40045 0.39270 0.36102 0.34419 0.31914
+Proportion of Variance 0.0008  0.00076 0.00065 0.00063 0.00053 0.00048 0.00041
+Cumulative Proportion  0.9932  0.99395 0.99460 0.99523 0.99576 0.99624 0.99666
+
+                         PC57    PC58    PC59    PC60    PC61    PC62    PC63
+Standard deviation     0.31611 0.31105 0.28746 0.26695 0.25796 0.23580 0.23092
+Proportion of Variance 0.00041 0.00039 0.00034 0.00029 0.00027 0.00023 0.00022
+Cumulative Proportion  0.99706 0.99746 0.99779 0.99808 0.99835 0.99858 0.99880
+
+                         PC64    PC65    PC66    PC67    PC68    PC69    PC70
+Standard deviation     0.2200  0.20365 0.19592 0.17661 0.16313 0.1570  0.13902
+Proportion of Variance 0.00020 0.00017 0.00016 0.00013 0.00011 0.00010 0.00008
+Cumulative Proportion  0.99900 0.99916 0.99932 0.99944 0.99955 0.99970 0.99973
+
+                         PC71    PC72    PC73    PC74    PC75    PC76    PC77
+Standard deviation     0.12689 0.11535 0.09460 0.09064 0.07993 0.07516 0.06302
+Proportion of Variance 0.00007 0.00005 0.00004 0.00003 0.00003 0.00002 0.00002
+Cumulative Proportion  0.99980 0.99985 0.99989 0.99992 0.99995 0.99997 0.99999
+
+                         PC78    PC79    PC80     PC81      PC82      PC83
+Standard deviation     0.04383 0.03745 0.01895 1.19e-15  8.636e-16 8.194e-16
+```
 
 ## Graficar PCA resistencia
 
