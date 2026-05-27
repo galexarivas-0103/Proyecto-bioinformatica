@@ -729,6 +729,7 @@ significant_fisher_vf <- fisher_virulence[
 nrow(significant_fisher_vf)
 [1] 134
 ```
+<img width="782" height="166" alt="tabla_fisher_arreglada" src="https://github.com/user-attachments/assets/6441b185-100d-45fe-8bbc-f498936cc7e1" />
 
 Estos análisis nos permitieron identificar genes de virulencia diferencialmente distribuidos entre ambos grupos bacterianos.
 
